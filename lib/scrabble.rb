@@ -1,7 +1,39 @@
 class Scrabble
 
   def score(word)
-    1
+    word.upcase.chars.map do |letter|
+      point_values[letter]
+    end.reduce(:+)
+  end
+
+  def score_with_multipliers(word, letter_multiplier, word_multiplier = 1)
+    @x = 0
+    word.upcase.chars.each_with_index do |letter, index|
+      @x += point_values[letter] * letter_multiplier[index]
+    end
+    @x += 10 if word.length == 7
+    return @x * word_multiplier
+  end
+
+  def highest_scoring_word(arr_words)
+    scores = arr_words.map do |word|
+      score(word)
+    end
+    high_array = arr_words.zip(scores)
+
+    high_hash = Hash[arr_words.zip scores]
+
+    y = high_hash.sort_by do |_key, value|
+      value
+    end
+require "pry"; binding.pry
+
+
+    x = high_hash.max_by do |k,v|
+      v
+    end
+    x[0]
+    require "pry"; binding.pry
   end
 
   def point_values
@@ -16,3 +48,4 @@ class Scrabble
     }
   end
 end
+Scrabble.new.highest_scoring_word(['hello', 'word', 'sound'])
